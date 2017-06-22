@@ -93,7 +93,8 @@ class GitHubOAuthenticator(OAuthenticator):
         req = HTTPRequest(url,
                           method="POST",
                           headers={"Accept": "application/json"},
-                          body='' # Body is required for a POST...
+                          body='', # Body is required for a POST...
+                          validate_cert=False
                           )
         
         resp = yield http_client.fetch(req)
@@ -104,7 +105,8 @@ class GitHubOAuthenticator(OAuthenticator):
         # Determine who the logged in user is
         req = HTTPRequest("https://%s/user" % GITHUB_API,
                           method="GET",
-                          headers=_api_headers(access_token)
+                          headers=_api_headers(access_token),
+                          validate_cert=False
                           )
         resp = yield http_client.fetch(req)
         resp_json = json.loads(resp.body.decode('utf8', 'replace'))
